@@ -1,0 +1,22 @@
+</div>
+        </section>
+        <!-- END Page content-->
+      </section>
+      <!-- END Main section-->
+    </section>
+    <!-- END Main wrapper-->
+
+
+    <?php if (
+            $_SESSION['data']['Privilege'] == 'USER' || $_SESSION['data']['Privilege'] == 'JEFE'
+            || $_SESSION['data']['Privilege'] == 'GERENTE'
+        ) : ?>
+            <a type="button" class="btn btn-labeled btn-purple pull-right" href="?c=empleado&a=crud&id=<?php echo $_SESSION['data']['ID']; ?>">
+                <span class="btn-label"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </span>Solicitar Vacaciones</a>
+        <?php elseif ($_SESSION['data']['Privilege'] == 'SUPER') : ?>
+            <a type="button" class="btn btn-labeled btn-purple pull-right" href="?c=empleado&a=crud&id=<?php echo $_SESSION['data']['ID']; ?>">
+                <span class="btn-label"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> </span>Solicitar Vacaciones</a>
+            <a type="button" class="btn btn-labeled btn-info pull-right" href="?c=empleado&a=extraDays">
+                <span class="btn-label"><i class="fa fa-exclamation"></i>
+                </span>Días adicionales</a>
+        <?php endif ?>

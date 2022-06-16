@@ -1,0 +1,8 @@
+Options -Indexes
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Este dominio hereda el paquete “PHP”.
+# php -- END cPanel-generated handler, do not edit
+
+# Hacer que el código de PHP parezca de tipo desconocido
+AddType application/x-httpd-php .bop .foo .133t
