@@ -50,7 +50,9 @@ class EmpleadoController
         require_once 'view/header.php';
         require_once 'view/aside.php';
         require_once 'view/empleado/empleado.php';
-        require_once 'view/footer.php';
+        /* require_once 'documento_extra.php */
+        /* Con esto se planea quitar carga de recursos innecesarios dependiendo de la vista a cargar */
+        require_once 'view/footer.php';/* Esto debe ser el final o en su defecto sustituir */
     }
     /* Recibe el id que se envia por url con el botón */
     public function crud()

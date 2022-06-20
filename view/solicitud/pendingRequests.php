@@ -2,7 +2,7 @@
     <!-- START Page content-->
     <section class="main-content">
         <h3>
-            Solicitudes
+            Solicitudes no aprobadas
             <br />
         </h3>
 
@@ -18,25 +18,25 @@
                                 <small>Solicitudes</small>
                             </div>
                             <div class="panel-body">
-                                <form method="post">
-                                    <!-- Val -->
-                                    <?php if (isset($_POST['borrar'])) : ?>
-                                        <?php if (empty($_POST['ctrldel'])) : ?>
-                                            <?php echo ('<div class="alert alert-danger alert-dismissable">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            <strong>No selecciono ningún registro</strong></div>'); ?>
-                                        <?php else : ?>
-                                            <?php foreach ($_POST['ctrldel'] as $e) : ?>
-                                                <?php $flag = $this->approveMassRequests($e) ?>
-                                                <?php if ($flag) : ?>
-                                                    <?php echo ('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>¡Todo salio bien!</strong></div>'); ?>
-                                                <?php else : ?>
-                                                    <?php echo ('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Oh, oh, algo salió mal... Error inesperado.</strong></div>'); ?>
-                                                <?php endif ?>
-                                            <?php endforeach; ?>
-                                        <?php endif ?>
-                                    <?php endif ?>
-                                    <!-- End Val -->
+                                <form method="post" action="?c=solicitud&a=approveMassRequests">
+                                    <!-- Alerts -->
+                                    <?php
+                                    if (isset($_SESSION['error']) && $_SESSION['error']) {
+                                        echo ('<div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>' . $_SESSION['error'] . '</strong></div>');
+                                        unset($_SESSION['error']);
+                                    }
+                                    ?>
+                                    <?php
+                                    if (isset($_SESSION['message']) && $_SESSION['message']) {
+                                        echo ('<div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>' . $_SESSION['message'] . '</strong></div>');
+                                        unset($_SESSION['message']);
+                                    }
+                                    ?>
+                                    <!-- End Alerts -->
                                     <table id="datatable3" class="table table-striped table-hover">
                                         <thead>
                                             <tr>
@@ -189,7 +189,9 @@
                                         </tbody>
                                     </table>
                                     <div class="text-right">
-                                        <input type="submit" name="borrar" value="Aprobar selección" class="btn btn-primary col-md-offset-10" onClick="window.location.reload();" />
+                                        <!-- <a href="" class="btn btn-primary col-md-offset-10" />Aprobar selección</a> -->
+                                        <button type="submit" class="btn btn-primary col-md-offset-10">Aprobar selección</button>
+                                        <!-- onClick="window.location.reload();" -->
                                     </div>
                                 </form>
                             </div>

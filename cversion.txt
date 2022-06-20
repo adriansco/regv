@@ -5,3 +5,4 @@
 1.6.16  Se agrega el módulo de días extra, el administrador podrá capturar el día en el que se repone el festivo trabajado, así como visualizar todos los empleados que hayan trabajado dichos días.
 1.6.17  Se realizan mejoras para el apartado días adicionales.
 1.6.18  Se realizan cambios en vista empleado-extra-days, se hace la validación de los días festivos, no se muestran hasta que pasaron dichos días, ejemplo si estamos a 16 de septiembre no se aprecia la información de los días 20 de noviembre, 1 de diciembre, 25 de diciembre.
+1.6.19 Se modifico el método de aprobación masiva.

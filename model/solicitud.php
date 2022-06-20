@@ -435,7 +435,7 @@ class Solicitud
     public function approveMassRequests($id)
     {
         try {
-            $stm = $this->pdo->prepare("SELECT idsolicitud, fk_empleado, cantidad FROM `solicitud` WHERE idsolicitud = ?");
+            $stm = $this->pdo->prepare("SELECT idsolicitud, fk_empleado, cantidad, `status`, folio FROM `solicitud` WHERE idsolicitud = ?");
             $stm->execute(array($id));
             return $stm->fetch(PDO::FETCH_OBJ);
             /* $rows = $stm->fetchAll(PDO::FETCH_ASSOC); */
@@ -446,6 +446,7 @@ class Solicitud
 
     public function updateEmploye($id, $disponibles, $usados)
     {
+        $this->pdo->beginTransaction();
         try {
             $stm = $this->pdo->prepare("UPDATE empleado SET disponibles = ?, usados = ? WHERE idempleado = ?");
             $stm->execute(array(
@@ -453,22 +454,27 @@ class Solicitud
                 $usados,
                 $id,
             ));
+            $this->pdo->commit();
             return TRUE;
         } catch (Exception $e) {
+            $this->pdo->rollback();
             die($e->getMessage());
         }
     }
 
     public function updateRequest($control, $id)
     {
+        $this->pdo->beginTransaction();
         try {
             $stm = $this->pdo->prepare("UPDATE solicitud SET `status` = ? WHERE idsolicitud = ?");
             $stm->execute(array(
                 $control,
-                $id,
+                $id
             ));
+            $this->pdo->commit();
             return TRUE;
         } catch (Exception $e) {
+            $this->pdo->rollback();
             die($e->getMessage());
         }
     }

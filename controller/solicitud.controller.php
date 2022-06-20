@@ -10,6 +10,7 @@ class SolicitudController
     private $model;
     private $dateOne;
     private $session;
+    const APROV_SOL = 1;      // RIGHT - Works INSIDE of a class definition.
 
     public function __CONSTRUCT()
     {
@@ -102,19 +103,45 @@ class SolicitudController
         header('Location: ?c=solicitud&a=pendingRequests');
     }
 
-    public function approveMassRequests($e)
+    public function approveMassRequests()
     {
-        if (isset($e)) {
-            $solicitud = $this->model->approveMassRequests($e);
-            if (isset($solicitud)) {
-                $empleado = $this->model->obtenerUser($solicitud->fk_empleado);
-                $disponibles = $empleado->disponibles - $solicitud->cantidad;
-                $usados = $empleado->usados + $solicitud->cantidad;
-                $ctrlemp = $this->updateEmploye($solicitud->fk_empleado, $disponibles, $usados);
-                $ctrlreq = $this->updateRequest(1, $solicitud->idsolicitud);
-                return ($ctrlemp && $ctrlreq ? true : false);
-            }
+        $solicitudes = $_REQUEST['ctrldel'];
+        $message = 'Solicitudes aprobadas ';
+
+        if (!isset($solicitudes)) {
+            $_SESSION['error'] = 'Oops... No hay registros seleccionados';
+            header('Location: ?c=solicitud&a=pendingRequests');
+            /* Asegurándonos de que el código interior no será ejecutado cuando se realiza la redirección. */
+            exit;/* die(); */
         }
+        foreach ($solicitudes as $s) :
+            $solicitud = $this->model->approveMassRequests($s);
+            if (!$solicitud) {
+                throw new Exception("Error Processing Request", 1);
+            }
+            if ($solicitud->status != 0) {
+                throw new Exception("Error Processing Request", 1);
+            }
+            /* Si se puede mejorar, hazlo. */
+            $id_empleado = $solicitud->fk_empleado;
+            $ctrl_aprob = self::APROV_SOL;
+            $empleado = $this->model->obtenerUser($id_empleado);
+            $disponibles = $empleado->disponibles - $solicitud->cantidad;
+            $usados = $empleado->usados + $solicitud->cantidad;
+            $ctrlemp = $this->updateEmploye($id_empleado, $disponibles, $usados);
+            if (!$ctrlemp) {
+                throw new Exception("Error Processing Request", 1);
+            }
+            $ctrlreq = $this->updateRequest($ctrl_aprob, $solicitud->idsolicitud);
+            if (!$ctrlreq) {
+                throw new Exception("Error Processing Request", 1);
+            }
+            $message .= ', ' . $solicitud->folio;
+        endforeach;
+        $_SESSION['message'] = $message;
+        header('Location: ?c=solicitud&a=pendingRequests');
+        /* Asegurándonos de que el código interior no será ejecutado cuando se realiza la redirección. */
+        exit;/* die(); */
     }
 
     public function eliminarSolicitud()
